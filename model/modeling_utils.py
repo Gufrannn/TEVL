@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 some functions are modified from HuggingFace
 (https://github.com/huggingface/transformers)
 """
@@ -12,11 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def prune_linear_layer(layer, index, dim=0):
-    """ Prune a linear layer (a model parameters)
-        to keep only entries in index.
-        Return the pruned layer as a new layer with requires_grad=True.
-        Used to remove heads.
-    """
     index = index.to(layer.weight.device)
     W = layer.weight.index_select(dim, index).clone().detach()
     if layer.bias is not None:

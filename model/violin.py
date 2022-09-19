@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 TEVL for VIOLIN
 """
 from collections import defaultdict

@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 TEVL for pretraining
 """
 from collections import defaultdict
@@ -127,17 +124,6 @@ class TEVLForPretraining(TEVLModel):
 
     def _get_st_ed_prob(self, modularized_query, context_feat2,
                         context_mask, cross=False):
-        """
-        Args:
-            modularized_query: (N, D)
-            context_feat2: (N, L, D),
-                output of the first transformer encoder layer
-            context_mask: (N, L)
-            st_predictor:
-            ed_predictor:
-            cross: at inference,
-                calculate prob for each possible pairs of query and context.
-        """
         # (N, D) no need to normalize here.
         query = self.video_query_linear(modularized_query)
         if cross:
@@ -201,13 +187,6 @@ class TEVLForPretraining(TEVLModel):
         return st_prob, ed_prob
 
     def get_video_level_loss(self, query_context_scores, reduction="mean"):
-        """ ranking loss between (pos. query + pos. video)
-            and (pos. query + neg. video) or (neg. query + pos. video)
-        Args:
-            query_context_scores: (Nq, Nv), cosine similarity [-1, 1],
-                Each row contains the scores
-                between the query to each of the videos inside the batch.
-        """
         bsz_q, bsz_v = query_context_scores.size()  # (Nq, Nv)
         num_q_per_v = int(bsz_q/bsz_v)
         loss_neg_ctx = torch.tensor(0).to(query_context_scores.device)
@@ -319,14 +298,6 @@ class TEVLForPretraining(TEVLModel):
 
     def get_all_neg_scores(self, scores_masked,
                            pos_indices=None, sample_min_idx=1):
-        """
-        scores: (N, N), cosine similarity [-1, 1],
-            Each row are scores: query --> all videos.
-            Transposed version: video --> all queries.
-        scores_masked: (N, N) the same as scores,
-            except that the diagonal (positive) positions
-            are masked with a large value.
-        """
         bsz, sample_size = scores_masked.size()
         assert sample_size > sample_min_idx,\
             "Unable to sample negative when bsz==sample_min_idx"
@@ -341,12 +312,6 @@ class TEVLForPretraining(TEVLModel):
         return neg_scores
 
     def get_ranking_loss(self, pos_score, neg_score):
-        """ Note here we encourage positive scores to be larger
-            than negative scores.
-        Args:
-            pos_score: (N, ), torch.float32
-            neg_score: (N, ), torch.float32
-        """
         if self.ranking_loss_type == "hinge":
             # max(0, m + S_neg - S_pos)
             loss = torch.clamp(
@@ -364,18 +329,6 @@ class TEVLForPretraining(TEVLModel):
     def get_video_level_scores(self, modularized_query,
                                context_feat1, context_mask,
                                val_gather_gpus=True):
-        """ Calculate video2query scores for each pair of video
-            and query inside the batch.
-        Args:
-            modularized_query: (N, D)
-            context_feat1: (N, L, D),
-                output of the first transformer encoder layer
-            context_mask: (N, L)
-        Returns:
-            context_query_scores: (N, N)
-                score of each query w.r.t. each video inside the batch,
-                diagonal positions are positive. used to get negative samples.
-        """
         modularized_query = F.normalize(modularized_query, dim=-1, eps=1e-5)
         context_feat1 = F.normalize(context_feat1, dim=-1, eps=1e-5)
         # gather all ranks to increase negative examples
@@ -414,13 +367,11 @@ class TEVLForPretraining(TEVLModel):
 
     def set_hard_negative(self, use_hard_negative, hard_pool_size,
                           hard_neg_weight):
-        """use_hard_negative: bool; hard_pool_size: int, """
         self.use_hard_negative = use_hard_negative
         self.hard_pool_size = hard_pool_size
         self.hard_neg_weight = hard_neg_weight
 
     def set_train_st_ed(self, lw_st_ed):
-        """pre-train video retrieval then span prediction"""
         self.lw_st_ed = lw_st_ed
 
 

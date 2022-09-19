@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 Input Embedding Layers
 """
 import torch
@@ -58,24 +55,11 @@ class SubEmbeddings(nn.Module):
         return embeddings
 
     def create_position_ids_from_input_ids(self, x):
-        """ Replace non-padding symbols with their position numbers.
-            Position numbers begin at padding_idx+1.
-            Padding symbols are ignored.
-            This is modified from fairseq's `utils.make_positions`.
-        :param torch.Tensor x:
-        :return torch.Tensor:
-        """
         mask = x.ne(self.padding_idx).long()
         incremental_indicies = torch.cumsum(mask, dim=1) * mask
         return incremental_indicies + self.padding_idx
 
     def create_position_ids_from_inputs_embeds(self, inputs_embeds):
-        """ We are provided embeddings directly.
-            We cannot infer which are padded so just generate
-            sequential position ids.
-        :param torch.Tensor inputs_embeds:
-        :return torch.Tensor:
-        """
         input_shape = inputs_embeds.size()[:-1]
         sequence_length = input_shape[1]
 
@@ -117,12 +101,6 @@ class ImageEmbeddings(nn.Module):
         return embeddings
 
     def create_position_ids_from_inputs_embeds(self, inputs_embeds):
-        """ We are provided embeddings directly.
-            We cannot infer which are padded so just generate
-            sequential position ids.
-        :param torch.Tensor inputs_embeds:
-        :return torch.Tensor:
-        """
         input_shape = inputs_embeds.size()[:-1]
         sequence_length = input_shape[1]
 
@@ -162,8 +140,6 @@ class FrameEmbeddings(nn.Module):
 
 
 class QueryFeatEmbeddings(nn.Module):
-    """Construct the embeddings from word, position and token_type embeddings.
-    """
     def __init__(self, config):
         super(QueryFeatEmbeddings, self).__init__()
         self.position_embeddings = nn.Embedding(

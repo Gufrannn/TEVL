@@ -1,11 +1,5 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 TEVL Model
-
-some classes are modified from HuggingFace
-(https://github.com/huggingface/transformers)
 """
 import json
 import logging
@@ -83,14 +77,6 @@ class VideoPreTrainedModel(RobertaPreTrainedModel):
 
     @classmethod
     def from_pretrained(cls, config_file, state_dict, *inputs, **kwargs):
-        """
-        Instantiate a UniterPreTrainedModel from a pre-trained model file or a
-        pytorch state dict.
-        Params:
-            config_file: config json file
-            state_dict: an state dictionnary
-            *inputs, **kwargs: additional input for the specific Uniter class
-        """
         config = cls.load_config(config_file)
         # Instantiate model.
         model = cls(config, *inputs, **kwargs)
@@ -155,15 +141,6 @@ class HierarchicalVlModel(VideoPreTrainedModel):
 
     def collect_frame_outputs(self, out_shape, frame_sequence_output,
                               num_subs, sub_idx2frame_idx):
-        """
-        Inputs:
-        :out_shape              (bz, #frames, hidden_size)
-        :frame_sequence_output  tensor (total_subs, max_vl+max_sl, hidden_size)
-        :num_subs               [num_sub]
-        :sub_idx2frame_idx      [ [(sub_ix, [frame_ix])] ]
-        Return:
-        :matched_v_feats        tensor (bz, #frames, hidden_size)
-        """
         matched_v_feats = torch.zeros(*out_shape,
                                       dtype=frame_sequence_output.dtype,
                                       device=frame_sequence_output.device)

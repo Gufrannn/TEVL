@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 Modified from https://github.com/jayleicn/TVCaption
 PyTorch Modules for TVC
 """

@@ -1,12 +1,7 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 TEVL for Video Corpus Moment Retrieval Tasks, shared by:
 1. TVR
 2. How2R
-3. DiDeMo with video and sub
-4. DiDeMo with video only
 """
 from .pretrain import TEVLForPretraining
 
@@ -27,8 +22,7 @@ class TEVLForVcmr(TEVLForPretraining):
             hard_neg_weight, use_all_neg)
 
     def forward(self, batch, task='tvr', compute_loss=True):
-        if task in ['tvr', 'how2r', 'didemo_video_sub',
-                    'didemo_video_only']:
+        if task in ['tvr', 'how2r']:
             return super().forward(
                 batch, task='vsm', compute_loss=compute_loss)
         else:

@@ -1,8 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
-
 Pytorch modules
 some classes are modified from HuggingFace
 (https://github.com/huggingface/transformers)
@@ -137,19 +133,7 @@ class RobertaModelConfig(object):
 
 
 class RobertaPreTrainedModel(nn.Module):
-    """ An abstract class to handle weights initialization and
-        a simple interface for dowloading and loading pretrained models.
-        Usage:
-            if opts.checkpoint:
-                    checkpoint = torch.load(opts.checkpoint)
-                else:
-                    checkpoint = {}
-
-                model = ModelCls.from_pretrained(
-                    opts.model_config, state_dict=checkpoint,
-                    vfeat_dim=vfeat_dim)
-    """
-    def __init__(self, config, *inputs, **kwargs):
+   def __init__(self, config, *inputs, **kwargs):
         super().__init__()
         if not isinstance(config, RobertaModelConfig):
             raise ValueError(

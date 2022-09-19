@@ -1,7 +1,4 @@
 """
-Copyright (c) Microsoft Corporation.
-Licensed under the MIT license.
-
 TEVL for Video Question Answering Tasks, shared by:
 1. TVQA
 2. How2QA
