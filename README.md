@@ -4,7 +4,7 @@ This repository currently supports finetuning TEVL on
 [TVR](https://tvr.cs.unc.edu/), [TVQA](http://tvqa.cs.unc.edu/), [TVC](https://tvr.cs.unc.edu/tvc.html) and
 [VIOLIN](https://github.com/jimmy646/violin).
 The best pre-trained checkpoint (on both [HowTo100M](https://www.di.ens.fr/willow/research/howto100m/) and [TV](http://tvqa.cs.unc.edu/) Dataset) are released. Code for TEVL pre-training on TV Dataset is also available.
-![Overview of TEVL]([https://github.com/Gufrannn/TEVL/blob/main/imgs/TEVL.png])
+![Overview of TEVL](https://github.com/Gufrannn/TEVL/blob/main/imgs/TEVL.png)
 Some code in this repo are copied/modified from opensource implementations made available by
 [PyTorch](https://github.com/pytorch/pytorch),
 [HuggingFace](https://github.com/huggingface/transformers),
